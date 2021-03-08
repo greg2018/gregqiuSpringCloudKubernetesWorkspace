@@ -1,0 +1,63 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: zuul-gateway-ip-service
+spec:
+  selector:
+    app: zuulgateway
+    tier: backend
+  ports:
+  - protocol: TCP
+    port: 8061
+    name: xxx8061
+  - protocol: TCP
+    port: 8091
+    name: xxx8091
+  type: ClusterIP
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app:  zuulgateway
+  name: zuul-gateway-node-port-service
+spec:
+  ports:
+  - name: discovery-node-port-8061
+    port: 8061
+    protocol: TCP
+    nodePort: 31002
+  type: NodePort
+  selector:
+    app: zuulgateway
+status:
+  loadBalancer: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zuulgateway
+spec:
+  selector:
+      matchLabels:
+        app: zuulgateway
+        tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zuulgateway
+        tier: backend
+    spec:
+      containers:
+        - name: zuulgateway
+          image: gregqiu/universalzuulgateway
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8061
+            - containerPort: 8091
+       
+

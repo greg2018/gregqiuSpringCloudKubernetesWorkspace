@@ -1,0 +1,9 @@
+spring.application.name=uni-zuul
+server.port=8061
+#discovery service URL
+eureka.client.serviceUrl.defaultZone = http://discovery-cluster-ip-service:8091/eureka
+eureka.instance.instance-id=${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+#spring.cloud.service-registry.auto-registration.enabled=false
+#eureka.client.enabled=false
+#eureka.client.serviceUrl.registerWithEureka=false

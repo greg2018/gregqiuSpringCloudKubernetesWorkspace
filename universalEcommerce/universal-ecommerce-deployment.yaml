@@ -1,0 +1,58 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ecommerce-ip-service
+spec:
+  selector:
+    app: ecommerce
+    tier: backend
+  ports:
+  - protocol: TCP
+    port: 8018
+  type: ClusterIP
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app:  zuulgateway
+  name: ecommerce-node-port-service
+spec:
+  ports:
+  - name: ecommerce-node-port-8018
+    port: 8018
+    protocol: TCP
+    nodePort: 31003
+  type: NodePort
+  selector:
+    app: ecommerce
+status:
+  loadBalancer: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce
+spec:
+  selector:
+      matchLabels:
+        app: ecommerce
+        tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ecommerce
+        tier: backend
+    spec:
+      containers:
+        - name: ecommerce
+          image: gregqiu/universalecommerce
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8018
+       
+

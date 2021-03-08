@@ -1,0 +1,4 @@
+http://localhost:8018/hello
+http://localhost:8061/ecommerce/hello
+
+java -jar target/universalDiscoveryService-1.0.0.jar -Xms128m -Xmx512m -XX:MaxPermSize=128m

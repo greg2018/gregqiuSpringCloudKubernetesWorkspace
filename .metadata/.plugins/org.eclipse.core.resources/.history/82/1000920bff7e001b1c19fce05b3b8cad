@@ -1,0 +1,14 @@
+package com.universal.discovery;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@EnableEurekaServer
+public class UniversalDiscoveryServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(UniversalDiscoveryServiceApplication.class, args);
+	}
+
+}

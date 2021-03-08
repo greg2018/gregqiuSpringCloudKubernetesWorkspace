@@ -1,0 +1,57 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: discovery-cluster-ip-service
+spec:
+  selector:
+    app: discovery
+    tier: backend
+  ports:
+  - protocol: TCP
+    port: 8091
+  type: ClusterIP
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app:  discovery
+  name: discovery-node-port-service
+spec:
+  ports:
+  - name: discovery-node-port-8091
+    port: 8091
+    protocol: TCP
+    nodePort: 30001
+  type: NodePort
+  selector:
+    app: demo
+status:
+  loadBalancer: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discovery
+spec:
+  selector:
+      matchLabels:
+        app: discovery
+        tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: discovery
+        tier: backend
+    spec:
+      containers:
+        - name: discovery
+          image: gregqiu/universaldiscoveryservice
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8091
+
